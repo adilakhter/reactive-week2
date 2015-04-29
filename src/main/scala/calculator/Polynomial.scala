@@ -1,9 +1,19 @@
 package calculator
 
+import scala.util.{Failure, Success}
+import scala.util.Try
+
 object Polynomial {
   def computeDelta(a: Signal[Double], b: Signal[Double],
       c: Signal[Double]): Signal[Double] = {
-    Signal(b() * b() - 4 * a() * c())
+    Signal(
+      Try(
+        b() * b() - 4 * a() * c()
+      ) match {
+        case Success(x)  => x
+        case Failure(ex) => Double.MinValue
+      }
+    )
   }
 
   def computeSolutions(a: Signal[Double], b: Signal[Double],
