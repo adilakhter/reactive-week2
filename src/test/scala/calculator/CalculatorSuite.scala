@@ -51,4 +51,50 @@ class CalculatorSuite extends FunSuite with ShouldMatchers {
     assert(resultRed2() == "red")
   }
 
+  test("Polynomial.computeDelta should return b*b-4*a*c"){
+    val coefficients = Array(Var(2.0), Var(3.0), Var(1.0))
+
+    val delta = Polynomial.computeDelta(coefficients(0), coefficients(1), coefficients(2))
+
+    assert(getDelta(coefficients(0)(),coefficients(1)(),coefficients(2)()) == delta())
+  }
+
+  test("Polynomial.computeSolutions should solve 2nd degree polynomial equation"){
+    val coefficients = Array(Var(2.0), Var(3.0), Var(1.0))
+
+    val delta = Polynomial.computeDelta(coefficients(0), coefficients(1), coefficients(2))
+
+    val solution = Polynomial.computeSolutions(coefficients(0), coefficients(1),coefficients(2),delta)
+
+    assert(solution() === Set(-1.0, -0.5))
+  }
+
+  test("Polynomial.computeSolutions should return no solution incase of negative delta"){
+    val coefficients = Array(Var(9.0), Var(3.0), Var(2.0))
+
+    val delta = Polynomial.computeDelta(coefficients(0), coefficients(1), coefficients(2))
+
+    assert(delta() < 0)
+
+    val solution = Polynomial.computeSolutions(coefficients(0), coefficients(1),coefficients(2),delta)
+
+    assert(solution() === Set())
+  }
+
+  test("Polynomial.computeSolutions should return single solution in case delta equals to 0"){
+    val coefficients = Array(Var(4.0), Var(4.0), Var(1.0))
+
+    val delta = Polynomial.computeDelta(coefficients(0), coefficients(1), coefficients(2))
+
+    assert(delta()  == 0)
+
+    val solution = Polynomial.computeSolutions(coefficients(0), coefficients(1),coefficients(2),delta)
+
+    assert(solution() === Set(-0.5))
+  }
+
+
+
+  def getDelta(a: Double, b: Double, c:Double) = b*b - 4*a*c
+
 }
